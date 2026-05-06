@@ -231,11 +231,4 @@ API Gateway REST con ruta `POST /upload`, integración Lambda proxy, stage con a
 
 ## Convenciones de Commits
 
-Este proyecto usa [Conventional Commits](https://www.conventionalcommits.org/):
-
-- `feat`: nueva funcionalidad
-- `fix`: corrección de errores
-- `chore`: tareas de mantenimiento
-- `docs`: cambios en documentación
-
-Ejemplo: `fix(compute): corregir ARN de lambda para integracion con API Gateway`
+Este proyecto usa [Conventional Commits]
