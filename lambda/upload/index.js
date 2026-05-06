@@ -1,1 +1,1 @@
-exports.handler = async (event) => { console.log("Carga iniciada"); return { statusCode: 200, body: "OK" }; };
+exports.handler = async (e) => ({ statusCode: 200, body: "ok" });
