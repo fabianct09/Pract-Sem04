@@ -1,14 +1,9 @@
-output "main_queue_url" {
-  description = "URL de la SQS Main Queue"
-  value       = aws_sqs_queue.main.id
+output "sqs_url" {
+  value       = aws_sqs_queue.main_event_queue.id
+  description = "URL de la cola principal"
 }
 
-output "main_queue_arn" {
-  description = "ARN de la SQS Main Queue"
-  value       = aws_sqs_queue.main.arn
-}
-
-output "dlq_arn" {
-  description = "ARN de la SQS DLQ"
-  value       = aws_sqs_queue.dlq.arn
+output "sqs_arn" {
+  value       = aws_sqs_queue.main_event_queue.arn
+  description = "ARN de la cola principal"
 }
