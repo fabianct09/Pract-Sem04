@@ -144,7 +144,7 @@ resource "aws_route_table_association" "private_b" {
 
 # --- Security Groups ---
 resource "aws_security_group" "upload_lambda" {
-  name        = "sg-upload-lambda-${var.environment}"
+  name        = "upload-lambda-${var.environment}"
   description = "SG for Upload Lambda"
   vpc_id      = aws_vpc.main.id
 
@@ -158,7 +158,7 @@ resource "aws_security_group" "upload_lambda" {
 }
 
 resource "aws_security_group" "crop_lambda" {
-  name        = "sg-crop-lambda-${var.environment}"
+  name        = "crop-lambda-${var.environment}"
   description = "SG for Crop Lambda"
   vpc_id      = aws_vpc.main.id
 
@@ -172,7 +172,7 @@ resource "aws_security_group" "crop_lambda" {
 }
 
 resource "aws_security_group" "vpce_sqs" {
-  name        = "sg-vpce-sqs-${var.environment}"
+  name        = "vpce-sqs-${var.environment}"
   description = "SG for SQS VPC Endpoint"
   vpc_id      = aws_vpc.main.id
 
@@ -208,4 +208,16 @@ resource "aws_vpc_endpoint" "sqs" {
   subnet_ids         = [aws_subnet.private_a.id, aws_subnet.private_b.id]
   security_group_ids = [aws_security_group.vpce_sqs.id]
   private_dns_enabled = true
+}
+resource "aws_security_group" "lambda_sg" {
+  name        = "upao-lambda-sg-${var.environment}"
+  description = "Security group para Lambda"
+  vpc_id      = aws_vpc.main.id   # ajusta al nombre de tu VPC resource
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }

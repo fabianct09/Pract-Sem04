@@ -1,24 +1,17 @@
-output "vpc_id" {
-  description = "ID de la VPC"
-  value       = aws_vpc.main.id
+output "private_subnets" {
+  value = [aws_subnet.private_a.id, aws_subnet.private_b.id]
 }
 
-output "private_subnet_ids" {
-  description = "IDs de las subredes privadas"
-  value       = [aws_subnet.private_a.id, aws_subnet.private_b.id]
+# Opción A: si el módulo compute solo usa la Lambda de upload
+output "lambda_sg_id" {
+  value = aws_security_group.upload_lambda.id
 }
 
-output "sg_upload_lambda_id" {
-  description = "ID del Security Group para Upload Lambda"
-  value       = aws_security_group.upload_lambda.id
+# Opción B: si necesitas ambos SGs por separado
+output "upload_lambda_sg_id" {
+  value = aws_security_group.upload_lambda.id
 }
 
-output "sg_crop_lambda_id" {
-  description = "ID del Security Group para Crop Lambda"
-  value       = aws_security_group.crop_lambda.id
-}
-
-output "vpce_sqs_id" {
-  description = "ID del VPC Endpoint de SQS"
-  value       = aws_vpc_endpoint.sqs.id
+output "crop_lambda_sg_id" {
+  value = aws_security_group.crop_lambda.id
 }
