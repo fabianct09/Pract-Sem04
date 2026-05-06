@@ -1,19 +1,20 @@
-# Generar un sufijo aleatorio para evitar colisiones de nombres globales en S3
+# 1. Generar sufijo aleatorio para evitar nombres duplicados en AWS
 resource "random_id" "bucket_suffix" {
   byte_length = 4
 }
 
-# --- Bucket S3 ---
+# 2. Definición del Bucket S3 (Solo uno)
 resource "aws_s3_bucket" "images" {
-  bucket = "image-processor-${var.environment}-images-${random_id.bucket_suffix.hex}"
+  # Usamos el nombre que definimos con el sufijo aleatorio
+  bucket = "upao-processor-${var.environment}-${random_id.bucket_suffix.hex}"
 
   tags = {
-    Name        = "image-processor-${var.environment}-images"
+    Name        = "upao-processor-${var.environment}-images"
     Environment = var.environment
   }
 }
 
-# Bloqueo de acceso público total habilitado
+# 3. Bloqueo de acceso público (Seguridad)
 resource "aws_s3_bucket_public_access_block" "public_access" {
   bucket = aws_s3_bucket.images.id
 
@@ -23,7 +24,7 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
   restrict_public_buckets = true
 }
 
-# Encriptación del lado del servidor (AES256)
+# 4. Encriptación AES256
 resource "aws_s3_bucket_server_side_encryption_configuration" "encryption" {
   bucket = aws_s3_bucket.images.id
 
@@ -34,7 +35,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encryption" {
   }
 }
 
-# Versionado habilitado
+# 5. Versionado
 resource "aws_s3_bucket_versioning" "versioning" {
   bucket = aws_s3_bucket.images.id
   
@@ -43,7 +44,7 @@ resource "aws_s3_bucket_versioning" "versioning" {
   }
 }
 
-# Ciclo de vida para los prefijos uploads/ y processed/
+# 6. Ciclo de vida (Limpieza automática de fotos viejas)
 resource "aws_s3_bucket_lifecycle_configuration" "lifecycle" {
   bucket = aws_s3_bucket.images.id
 
@@ -74,7 +75,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "lifecycle" {
   }
 }
 
-# Notificación de eventos a SQS
+# 7. Notificación de eventos a SQS
 resource "aws_s3_bucket_notification" "bucket_notification" {
   bucket = aws_s3_bucket.images.id
 
