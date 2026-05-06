@@ -113,85 +113,44 @@ project/
 - Node.js 20.x
 - Git
 
----
+## Flujo de trabajo con Gitflow
 
-## Configuración por Entorno
+Las ramas del proyecto siguen la convención de Gitflow:
 
-| Variable | DEV | QA | PROD |
-|---|---|---|---|
-| `nat_gateway_count` | 1 | 1 | 2 |
-| `log_retention_days` | 7 | 7 | 14 |
-| `api_throttle_rps` | 1000 | 1000 | 10000 |
+- `main` — código estable y desplegado
+- `develop` — integración de funcionalidades
+- `funcionalidad/<nombre>` — desarrollo de cada módulo
 
 ---
 
-## Instrucciones de Despliegue
-
-### 1. Clonar el repositorio
+## Comandos Terraform
 
 ```bash
-git clone <url-del-repositorio>
-cd Pract-Sem04
-```
-
-### 2. Empaquetar las funciones Lambda
-
-```bash
-# Upload Lambda
-cd lambda/upload
-zip upload.zip index.js
-cd ../..
-
-# Crop Lambda
-cd lambda/crop
-zip crop.zip index.js
-cd ../..
-```
-
-### 3. Inicializar y desplegar un entorno
-
-```bash
-cd envs/qa   # o dev / prod
-
+# Inicializar
 terraform init
+
+# Validar
 terraform validate
-terraform fmt -recursive
+
+# Planear
 terraform plan -out=tfplan.qa
+
+# Aplicar
 terraform apply "tfplan.qa"
-```
 
-### 4. Verificar el despliegue
-
-Al finalizar, Terraform muestra los outputs:
-
-```
-Outputs:
-
-api_url     = "https://xxxxxxxx.execute-api.us-east-1.amazonaws.com/qa/upload"
-bucket_name = "upao-processor-qa-xxxxxxxx"
-```
-
-Probar el endpoint:
-
-```bash
-curl -X POST https://<api_url> \
-  -H "Content-Type: application/json" \
-  -d '{"filename": "test.jpg"}'
-```
-
-### 5. Destruir los recursos
-
-```bash
+# Destruir
 terraform destroy
 ```
 
-Confirmar con `yes`. Al finalizar se muestra:
-
-```
-Destroy complete! Resources: N destroyed.
-```
-
 ---
+
+## Entornos
+
+| Entorno | Directorio |
+|---|---|
+| DEV | envs/dev |
+| QA | envs/qa |
+| PROD | envs/prod |
 
 ## Módulos
 
